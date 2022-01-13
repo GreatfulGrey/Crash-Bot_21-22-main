@@ -23,6 +23,73 @@ public class Drivetrain {
 
         leftSpeedControl.setInverted(true); 
     }
+   
+    public void setLeftSpeed(double speed){
+        leftSpeedControl.set(speed);
+    }
+
+    public void setRightSpeed(double speed){
+        rightSpeedControl.set(speed);
+    }
+
+    /**
+     * Maps joysticks to the drivetrain for Arcade layout
+     * @param speed scaling factor for robot speed
+     */
+    public void arcadeDrive(double speed){
+        double y = OI.driver.getLY();
+        double x = OI.driver.getRX();
+        y = -speed * y;
+        x = -speed * x;
+        setSpeed(y-x, y+x);
+    }
+
+    public void setSpeed(double leftSpeed, double rightSpeed) {
+        setRightSpeed(rightSpeed);
+        setLeftSpeed(leftSpeed);
+    }
+
+    public void resetPosition() {
+        l_primary.getEncoder().setPosition(0);
+        r_primary.getEncoder().setPosition(0);
+    }
+
+    public double errorFunction(double error){
+        return Math.sqrt(-error + 1);
+    }
+    
+    public void driveStraight (double targetDist) {
+        resetPosition();
+        double error = (getLeftPosition()) / targetDist;
+        double speed = 0;
+
+        if (targetDist > 0) {
+            while (targetDist > getLeftPosition()) {
+                error = (getLeftPosition()) / targetDist;
+                speed = errorFunction(error);
+                setSpeed(speed, speed);
+            }
+        }
+        
+        if (targetDist < 0) {
+            while (targetDist < getLeftPosition()) {
+                error = (getLeftPosition()) / targetDist;
+                speed = errorFunction(error);
+                setSpeed(-speed, -speed);
+            }
+        }
+        resetPosition();
+    }
+
+
+    public double getRightPosition() {
+        return r_primary.getEncoder().getPosition();
+    }
+
+    public double getLeftPosition() {
+        return l_primary.getEncoder().getPosition();
+    }
+
     public void setSpeed(double leftSpeed, double rightSpeed) {
         setRightSpeed(rightSpeed);
         setLeftSpeed(leftSpeed);
@@ -38,12 +105,5 @@ public class Drivetrain {
     }
     public void setLeftSpeed(double speed){
         leftSpeedControl.set(speed);
-    }
-    public void arcadeDrive(double speed){ //arcade drive shamelessly stolen from old code should probably make it a tank but whatever idc
-        double y = OI.driver.getLY();
-        double x = OI.driver.getRX();
-        y = -speed * y;
-        x = -speed * x;
-        setSpeed(y-x, y+x);
     }
 }
