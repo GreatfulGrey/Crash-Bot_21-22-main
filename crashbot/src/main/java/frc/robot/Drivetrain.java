@@ -12,14 +12,13 @@ import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
-
 /**
  * This is the code for the robot drivetrain. It initializes motor controllers and has methods
  * for various functions of the drivetrain.
- * @author gjs
  */
+
 public class Drivetrain {
-    private CANSparkMax l_primary, l_secondary, r_primary, r_secondary;
+    private CANSparkMax l_primary, l_secondary, r_primary, r_secondary, l_tertiary, r_tertiary;
     private static Drivetrain instance;
     private SpeedControllerGroup leftSpeedControl;
     private SpeedControllerGroup rightSpeedControl;
@@ -101,9 +100,14 @@ public class Drivetrain {
         right.getEncoder().setPosition(0);
     }
 
+    public void move(double speed) {
+        setSpeed(speed, speed);
+    }
+
     public double errorFunction(double error){
         return Math.sqrt(-error + 1);
     }
+
     
     public void driveStraight (double targetDist) {
         resetPosition();
