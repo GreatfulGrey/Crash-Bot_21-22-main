@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.SPI.Port;
 
 public class ButtonMap {
     public static class Drivetrain {
-        public static final int LEFT0 = 0;
-        public static final int LEFT1 = 1;
-        public static final int LEFT2 = 2;
-        public static final int RIGHT0 = 3;
-        public static final int RIGHT1 = 4;
-        public static final int RIGHT2 = 5;
+        public static final int LEFT_PRIMARY = 0;
+        public static final int LEFT_SECONDARY = 1;
+        public static final int LEFT_TERTIARY = 2;
+        public static final int RIGHT_PRIMARY = 3;
+        public static final int RIGHT_SECONDARY = 4;
+        public static final int RIGHT_TERTIARY = 5;
 
         public static final boolean LEFT_IS_INVERTED = false;
         public static final boolean RIGHT_IS_INVERTED = true;

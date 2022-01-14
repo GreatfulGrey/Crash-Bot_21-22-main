@@ -39,9 +39,11 @@ public class Drivetrain {
         r_primary = new CANSparkMax(RobotMap.Drivetrain.RIGHT_PRIMARY, MotorType.kBrushless);
         l_secondary = new CANSparkMax(RobotMap.Drivetrain.LEFT_SECONDARY, MotorType.kBrushless);
         r_secondary = new CANSparkMax(RobotMap.Drivetrain.RIGHT_SECONDARY, MotorType.kBrushless);
+        l_tertiary = new CANSparkMax(RobotMap.Drivetrain.LEFT_TERTIARY, MotorType.kBrushless);
+        r_tertiary = new CANSparkMax(RobotMap.Drivetrain.RIGHT_TERTIARY, MotorType.kBrushless);
 
-        leftSpeedControl = new SpeedControllerGroup(l_primary,l_secondary);
-        rightSpeedControl = new SpeedControllerGroup(r_primary, r_secondary);
+        leftSpeedControl = new SpeedControllerGroup(l_primary,l_secondary, l_tertiary);
+        rightSpeedControl = new SpeedControllerGroup(r_primary, r_secondary, r_tertiary);
         // leftPID = new PIDController(klP, klI, klD);
 
         leftSpeedControl.setInverted(RobotMap.Drivetrain.LEFT_IS_INVERTED);
@@ -96,8 +98,12 @@ public class Drivetrain {
     }
 
     public void resetPosition() {
-        left.getEncoder().setPosition(0);
-        right.getEncoder().setPosition(0);
+        l_primary.getEncoder().setPosition(0);
+        r_primary.getEncoder().setPosition(0);
+    }
+
+    public void resetOrientation() {
+        gyro.reset();
     }
 
     public void move(double speed) {
@@ -134,18 +140,11 @@ public class Drivetrain {
 
 
     public double getRightPosition() {
-        return right.getEncoder().getPosition();
+        return r_primary.getEncoder().getPosition();
     }
 
     public double getLeftPosition() {
-        return left.getEncoder().getPosition();
+        return l_primary.getEncoder().getPosition();
     }
 
-
-    public static Drivetrain getInstance(){
-        if(instance == null){
-            instance = new Drivetrain();
-        }
-        return instance;
-    }
 }
