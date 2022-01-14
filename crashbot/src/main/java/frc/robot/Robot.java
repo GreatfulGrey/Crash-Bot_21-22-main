@@ -26,5 +26,6 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         OI.update();
         Scheduler.getInstance().run();
+        Robot.drivetrain.driveStraight(1);
     }
 }

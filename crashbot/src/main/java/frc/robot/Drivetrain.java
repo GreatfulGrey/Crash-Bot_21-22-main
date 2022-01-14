@@ -50,8 +50,8 @@ public class Drivetrain {
     }
 
     public void resetPosition() {
-        l_primary.getEncoder().setPosition(0);
-        r_primary.getEncoder().setPosition(0);
+        left.getEncoder().setPosition(0);
+        right.getEncoder().setPosition(0);
     }
 
     public double errorFunction(double error){
@@ -83,27 +83,18 @@ public class Drivetrain {
 
 
     public double getRightPosition() {
-        return r_primary.getEncoder().getPosition();
+        return right.getEncoder().getPosition();
     }
 
     public double getLeftPosition() {
-        return l_primary.getEncoder().getPosition();
+        return left.getEncoder().getPosition();
     }
 
-    public void setSpeed(double leftSpeed, double rightSpeed) {
-        setRightSpeed(rightSpeed);
-        setLeftSpeed(leftSpeed);
-    }
+
     public static Drivetrain getInstance(){
         if(instance == null){
             instance = new Drivetrain();
         }
         return instance;
-    }
-    public void setRightSpeed(double speed){
-        rightSpeedControl.set(speed);
-    }
-    public void setLeftSpeed(double speed){
-        leftSpeedControl.set(speed);
     }
 }
