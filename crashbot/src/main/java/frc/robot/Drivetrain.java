@@ -1,27 +1,74 @@
-package frc.robot;
+package frc.robot.subsystems;
+
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.OI;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
 
+
+/**
+ * This is the code for the robot drivetrain. It initializes motor controllers and has methods
+ * for various functions of the drivetrain.
+ * @author gjs
+ */
 public class Drivetrain {
-    public static Drivetrain instance;
-    private CANSparkMax left, right, left1, right1, left2, right2; //Motor declaration stuff
-    private SpeedControllerGroup leftSpeedControl; //set speed control for right and left groups
-    private SpeedControllerGroup rightSpeedControl; 
+    private CANSparkMax l_primary, l_secondary, r_primary, r_secondary;
+    private static Drivetrain instance;
+    private SpeedControllerGroup leftSpeedControl;
+    private SpeedControllerGroup rightSpeedControl;
+    private CANEncoder lEncoder, rEncoder;
+    private double klP = 0.0;
+    private double klI = 0.0;
+    private double klD = 0.0;
+    private double initialDistance = 0; // used for driveStraight()
+    private PIDController leftPID, rightPID;
+    private double kP = 0;
+    private double kI = 0;
+    private double kD = 0;
+    private final double INCHES_PER_TICK = 1/ 18.064; // TODO: entirely untested!
+    private final double maxVelocity = 5676; // TODO: entirely untested! measured in RPM
 
-    private Drivetrain(){
-        left = new CANSparkMax(ButtonMap.Drivetrain.LEFT0, MotorType.kBrushless);
-        right = new CANSparkMax(ButtonMap.Drivetrain.RIGHT0, MotorType.kBrushless);
-        left1 = new CANSparkMax(ButtonMap.Drivetrain.LEFT1, MotorType.kBrushless);
-        right1 = new CANSparkMax(ButtonMap.Drivetrain.RIGHT1, MotorType.kBrushless);
-        left2 = new CANSparkMax(ButtonMap.Drivetrain.LEFT2, MotorType.kBrushless);
-        right2 = new CANSparkMax(ButtonMap.Drivetrain.RIGHT2, MotorType.kBrushless);
+    private Drivetrain() {
+        l_primary = new CANSparkMax(RobotMap.Drivetrain.LEFT_PRIMARY, MotorType.kBrushless);
+        r_primary = new CANSparkMax(RobotMap.Drivetrain.RIGHT_PRIMARY, MotorType.kBrushless);
+        l_secondary = new CANSparkMax(RobotMap.Drivetrain.LEFT_SECONDARY, MotorType.kBrushless);
+        r_secondary = new CANSparkMax(RobotMap.Drivetrain.RIGHT_SECONDARY, MotorType.kBrushless);
 
-        leftSpeedControl = new SpeedControllerGroup(left, left1, left2);
-        rightSpeedControl = new SpeedControllerGroup(right, right1, right2);
+        leftSpeedControl = new SpeedControllerGroup(l_primary,l_secondary);
+        rightSpeedControl = new SpeedControllerGroup(r_primary, r_secondary);
+        // leftPID = new PIDController(klP, klI, klD);
 
-        leftSpeedControl.setInverted(true); 
+        leftSpeedControl.setInverted(RobotMap.Drivetrain.LEFT_IS_INVERTED);
+        rightSpeedControl.setInverted(RobotMap.Drivetrain.RIGHT_IS_INVERTED);
+
+        leftPID = new PIDController(kP, kI, kD);
+        rightPID = new PIDController(kP, kI, kD);
+
+        // lEncoder = l_primary.getEncoder();
+        // rEncoder = r_primary.getEncoder();
+        // leftPID = new PIDController(kP, kI, kD);
+        // l_primary.getEncoder()
+        //     .setPositionConversionFactor(INCHES_PER_TICK); // set scale for encoder ticks
+        // r_primary.getEncoder()
+        //     .setPositionConversionFactor(INCHES_PER_TICK);
+    }
+
+    /**
+     * creates a new instance of the drivetrain class if one has not been made
+     * @return an instance of the drivetrain class
+     */
+    public static Drivetrain getInstance() {
+        if (instance == null) {
+            return new Drivetrain();
+        }
+        return instance;
     }
    
     public void setLeftSpeed(double speed){
