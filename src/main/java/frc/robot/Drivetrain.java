@@ -49,11 +49,22 @@ public class Drivetrain {
         
         double left = OI.driver.getLY();
         double right = OI.driver.getRY();
-        left = speed * left * 0.4;
-        right = -speed * right * 0.4;
+        left = -speed * left * 0.7;
+        right = speed * right * 0.7;
         setLeftSpeed(left);
         setRightSpeed(right);
     }
+
+    public void arcadeDrive(double speed){
+        double y = OI.driver.getLY();
+        double x = OI.driver.getRX();
+        y = y * 0.7;
+        x = x * 0.7;
+        setLeftSpeed(y+x);
+        setRightSpeed(y-x);
+    }
+
+    
     
 
 }

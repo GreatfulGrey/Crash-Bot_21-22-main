@@ -40,6 +40,14 @@ public class ButtonWrapper {
         }
         return ly;
 	}
+
+    public double getRX(){
+        double rx = this.controller.getRawAxis(ButtonMap.Controllers.R);
+        if(DEADZONE_ENABLED){
+            return Helper.deadzone(rx, this.getDeadzone());
+        }
+        return rx;
+    }
 	
 
     public double getRY() {

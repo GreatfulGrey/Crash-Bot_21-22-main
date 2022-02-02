@@ -8,12 +8,7 @@ public class OI {
     public static void update() {
 
 
-        if (driver.isAltMode()) {
-            Robot.drivetrain.tankDrive(0.5);
-        } 
-        else {
-            Robot.drivetrain.tankDrive(0.5);
-        }
+        Robot.drivetrain.arcadeDrive(0);
 
     }
     public static void initSD() {}  

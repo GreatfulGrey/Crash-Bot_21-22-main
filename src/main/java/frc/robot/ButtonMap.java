@@ -14,7 +14,7 @@ public class ButtonMap {
         public static final int DRIVER_PORT = 0;
 
 
-        public static final int L = 5;
+        public static final int L = 4;
         public static final int R = 1;
     }
 }
