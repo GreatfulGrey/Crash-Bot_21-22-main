@@ -1,9 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SPI.Port;
-
 public class ButtonMap {
     public static class Drivetrain {
         public static final int LEFT0 = 0;

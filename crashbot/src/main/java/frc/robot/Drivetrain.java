@@ -23,7 +23,12 @@ public class Drivetrain {
 
         leftSpeedControl.setInverted(true); 
     }
-   
+    public static Drivetrain getInstance(){
+        if(instance == null){
+            instance = new Drivetrain();
+        }
+        return instance;
+    } 
     public void setLeftSpeed(double speed){
         leftSpeedControl.set(speed);
     }
@@ -31,20 +36,26 @@ public class Drivetrain {
     public void setRightSpeed(double speed){
         rightSpeedControl.set(speed);
     }
-
-    /**
-     * Maps joysticks to the drivetrain for Arcade layout
-     * @param speed scaling factor for robot speed
-     */
+    public void tankDrive(double speed){
+        double y = OI.driver.getLY();
+        double x = OI.driver.getRX();
+        y = -speed * y;
+        x = -speed * x;
+        setLeftSpeed(y);
+        setRightSpeed(x);
+    }
     public void arcadeDrive(double speed){
         double y = OI.driver.getLY();
         double x = OI.driver.getRX();
         y = -speed * y;
         x = -speed * x;
-        setSpeed(y-x, y+x);
+        setLeftSpeed(y-x);
+        setRightSpeed(x+y);
     }
 
-    public void setSpeed(double leftSpeed, double rightSpeed) {
+
+
+/*    public void setSpeed(double leftSpeed, double rightSpeed) {
         setRightSpeed(rightSpeed);
         setLeftSpeed(leftSpeed);
     }
@@ -97,4 +108,5 @@ public class Drivetrain {
         }
         return instance;
     }
+    */
 }
